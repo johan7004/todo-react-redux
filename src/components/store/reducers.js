@@ -13,15 +13,19 @@ export const isLoading = (state = false, action) => {
       return state;
   }
 }
+const initialState = { isLoading: false, data: [] };
 
-export const todos = (state = [], action) => {
-  const { type, payload } = action;
+export const todos = (state = initialState, action) => {
+    const { type, payload } = action;
 
-  switch (type) {
-  case CREATE_TODO: {
-      const { todo } = payload;
-      return state.concat(todo);
-  }
+    switch (type) {
+    case CREATE_TODO: {
+        const { todo } = payload;
+        return {
+            ...state,
+            data: state.data.concat(todo),
+        };
+    }
   case REMOVE_TODO: {
       const { todo: todoToRemove } = payload;
       return state.filter(todo => todo.id !== todoToRemove.id);
