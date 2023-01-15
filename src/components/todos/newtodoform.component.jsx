@@ -1,41 +1,41 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import { createTodo } from "../store/actions.jsx";
-import "./NewTodoForm.css";
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { addTodoRequest } from './../store/thunks.js';
+import './NewTodoForm.css';
 
-function NewTodoForm({ todos, onCreatePressed }) {
-  const [inputValue, setInputValue] = useState("");
-  return (
-    <div className="new-todo-form">
-      <input
-        className="new-todo-input"
-        type="text"
-        placeholder="Type your new todo here"
-        value={inputValue}
-        onChange={(e) => {setInputValue(e.target.value); console.log(e.target.value)}}
-      />
-      <button
-        className="new-todo-button"
-        onClick={() => {
-          const isDuplicateText = todos.some(
-            (todo) => todo.text === inputValue
-          );
-          if (!isDuplicateText) {
-            onCreatePressed(inputValue);
-            setInputValue("");
-          }
-        }}
-      >
-        Create Todo
-      </button>
-    </div>
-  );
-}
+const NewTodoForm = ({ todos, onCreatePressed }) => {
+    const [inputValue, setInputValue] = useState('');
 
-const mapStateToProps = (state) => ({
-  todos: state.todos,
+    return (
+        <div className="new-todo-form">
+            <input
+                className="new-todo-input"
+                type="text"
+                placeholder="Type your new todo here"
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)} />
+            <button
+                onClick={() => {
+                    const isDuplicateText =
+                        todos.some(todo => todo.text === inputValue);
+                    if (!isDuplicateText) {
+                        onCreatePressed(inputValue);
+                        setInputValue('');
+                    }
+                }}
+                className="new-todo-button">
+                Create Todo
+            </button>
+        </div>
+    );
+};
+
+const mapStateToProps = state => ({
+    todos: state.todos,
 });
-const mapDispatchToProps = (dispatch) => ({
-  onCreatePressed: (text) => dispatch(createTodo(text)),
+
+const mapDispatchToProps = dispatch => ({
+    onCreatePressed: text => dispatch(addTodoRequest(text)),
 });
+
 export default connect(mapStateToProps, mapDispatchToProps)(NewTodoForm);
